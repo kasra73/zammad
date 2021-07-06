@@ -9,7 +9,7 @@ targets:
       - elasticsearch
       - nginx
       - "postgresql-server >= 9.3"
-      - "nodejs >= 10"
+      - "nodejs >= 10.0"
       - which
       - epel-release
       - imlib2
