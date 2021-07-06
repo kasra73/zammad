@@ -8,7 +8,7 @@ targets:
       - curl
       - elasticsearch
       - nginx
-      - postgresql-server
+      - "postgresql-server >= 9.3"
       - which
       - epel-release
       - imlib2
