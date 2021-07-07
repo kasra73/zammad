@@ -223,3 +223,5 @@ end
 eval_gemfile 'Gemfile.local' if File.exist?('Gemfile.local')
 
 gem "rubyntlm", "~> 0.6.3"
+
+gem "concurrent-ruby", "~> 1.1"

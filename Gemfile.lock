@@ -593,6 +593,7 @@ DEPENDENCIES
   coffee-script-source
   coffeelint
   composite_primary_keys
+  concurrent-ruby (~> 1.1)
   coveralls
   daemons
   dalli
