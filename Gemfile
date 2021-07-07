@@ -133,7 +133,6 @@ gem 'zendesk_api'
 
 # integrations - exchange
 gem 'autodiscover', git: 'https://github.com/zammad-deps/autodiscover'
-gem 'rubyntlm', git: 'https://github.com/wimm/rubyntlm'
 gem 'viewpoint'
 
 # integrations - S/MIME
@@ -222,3 +221,5 @@ end
 #               (or else risk pushing unwanted changes to Gemfile.lock!)
 #               https://git.znuny.com/zammad/zammad/wikis/Tips#user-content-customizing-the-gemfile
 eval_gemfile 'Gemfile.local' if File.exist?('Gemfile.local')
+
+gem "rubyntlm", "~> 0.6.3"

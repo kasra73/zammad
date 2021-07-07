@@ -1,6 +1,38 @@
 # rubocop:disable all
+
+require 'rubyntlm'
+
 module Net
   class SMTP
+    # true if server advertises AUTH NTLM.
+    # You cannot get valid value before opening SMTP session.
+    def capable_ntlm_auth?
+      auth_capable?('NTLM')
+    end
+
+    def auth_ntlm(user, secret)
+      check_auth_args user, secret
+      res = critical {
+        # send type1 message
+        t1 = Net::NTLM::Message::Type1.new()
+        t1.domain = user[/^[^\\]+/]
+        @socket.writeline "AUTH NTLM " + t1.encode64
+
+        # receive type2 message
+        line = @socket.readline
+        unless /334 (.+)/ =~ line
+          raise RuntimeError, "SMTP AUTH don't recognize this: #{line}"
+        end
+        t2 = Net::NTLM::Message.decode64($1)
+
+        # send Type3 Message
+	      t3 = t2.response({:user => user[/[^\\]+$/], :password => secret}, {:ntlmv2 => true})
+        get_response(t3.encode64)
+      }
+      check_auth_response res
+      res
+    end
+
     def do_start(helo_domain, user, secret, authtype)
       raise IOError, 'SMTP session already started' if @started
       if user or secret
@@ -37,6 +69,8 @@ module Net
             authtype = 'LOGIN'
           elsif capable_cram_md5_auth?
             authtype = 'CRAM-MD5'
+          elsif capable_ntlm_auth?
+            authtype = 'NTLM'
           end
         end
       end
